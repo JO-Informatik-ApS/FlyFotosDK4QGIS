@@ -22,11 +22,11 @@ The plugin is compatible with QGIS versions 3.4 and above.
 
 ## Releases
 
-You can find the latest release as a zip file on [QGIS plugin website](https://plugins.qgis.org/plugins/) or over in [the release section](https://github.com/JO-Informatik-ApS/FlyFotosDK4QGIS_Test/releases), where you can download them and give them a try.
+You can find the latest release as a zip file on [QGIS plugin website](https://plugins.qgis.org/plugins/) or over in [the release section](https://github.com/JO-Informatik-ApS/FlyFotosDK4QGIS/releases), where you can download them and give them a try.
 
 ## Issues
 
-If you have any problems or difficulties running the client, feel free to [create a new issue here](https://github.com/JO-Informatik-ApS/FlyFotosDK4QGIS_Test/issues "Create an issue").
+If you have any problems or difficulties running the client, feel free to [create a new issue here](https://github.com/JO-Informatik-ApS/FlyFotosDK4QGIS/issues "Create an issue").
 
 ## Known issues
 
