@@ -1,0 +1,2 @@
+from .settings_config import ConfigOptionsPage, ConfigDialog
+from .settings_options_factory import MyPluginOptionsFactory
