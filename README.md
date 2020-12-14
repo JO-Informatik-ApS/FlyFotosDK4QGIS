@@ -16,7 +16,7 @@ The FlyFotosDK service offers more than 1.200 unique historical aerial photoseri
 
 This plugin helps with managing the many aerial photoseries. It allows you for example to get an overview of the visible layers in the current map canvas extent. Alternately you can sort the photoseries based on scale for a given decade.
 
-To use this plugin you need to have you need to have an account - read more here <a href="https://flyfotos.dk/da-dk/produkter/adgang">https://flyfotos.dk/da-dk/produkter/adgang</a>
+To use this plugin you need to have an account - read more here <a href="https://flyfotos.dk/da-dk/produkter/adgang">https://flyfotos.dk/da-dk/produkter/adgang</a>
 
    <img src="https://flyfotos.dk/Portals/2/flyfotodk-logo.png?ver=2020-05-20-124201-440" alt="FlyfotosDK" width="201" height="62">
 
