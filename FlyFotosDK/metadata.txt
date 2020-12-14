@@ -17,6 +17,13 @@ about=Tjenesten FlyFotosDK udbyder mere end 1.200 unikke historiske flyfotoserie
 
     For at kunne anvende denne plugin skal du have etableret en brugerkonto til tjenesten - Læs mere her <a href="https://flyfotos.dk/da-dk/produkter/adgang">https://flyfotos.dk/da-dk/produkter/adgang</a>
 
+    English:
+    The FlyFotosDK service offers more than 1.200 unique historical aerial photoseries, which is the equivalent of more than half a million individual photos. This large catalogue covers the whole of Denmark, divided over multiple decades and several scales. Read more about the service on the website <a href="https://flyfotos.dk/">https://flyfotos.dk/</a>
+    
+    This plugin helps with managing the many aerial photoseries. It allows you for example to get an overview of the visible layers in the current map canvas extent. Alternately you can sort the photoseries based on scale for a given decade.
+    
+    To use this plugin you need to have you need to have an account - read more here <a href="https://flyfotos.dk/da-dk/produkter/adgang">https://flyfotos.dk/da-dk/produkter/adgang</a>
+
     <img src="https://flyfotos.dk/Portals/2/flyfotodk-logo.png?ver=2020-05-20-124201-440" alt="FlyfotosDK" width="201" height="62">
 
 tracker=https://github.com/JO-Informatik-ApS/FlyFotosDK4QGIS/issues
