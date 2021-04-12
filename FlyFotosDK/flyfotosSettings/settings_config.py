@@ -1,10 +1,10 @@
 import os.path
+import re
 from PyQt5 import uic
 from qgis.gui import (QgsOptionsPageWidget)
-from PyQt5.QtWidgets import QVBoxLayout, QMessageBox
-from PyQt5.QtGui import QFont, QRegExpValidator
+from PyQt5.QtWidgets import QVBoxLayout
+from PyQt5.QtGui import QFont
 from qgis.core import (QgsSettings)
-from PyQt5.QtCore import QRegExp
 
 WIDGET, BASE = uic.loadUiType(
     os.path.join(os.path.dirname(__file__), 'flyfotos_settings.ui')
@@ -37,35 +37,34 @@ class ConfigDialog(WIDGET, BASE):
         self.setupUi(self)
         # Display url link to contact page
         urlLink = "<a href=\"https://flyfotos.dk/da-dk/Produkter/Adgang\">Please contact us</a>"
-        self.labelLinkRegister.setText(urlLink)
-        self.labelLinkRegister.setFont(QFont('Arial', 9))
-        self.labelLinkRegister.setOpenExternalLinks(True)
+        self.label_link_register.setText(urlLink)
+        self.label_link_register.setFont(QFont('Arial', 9))
+        self.label_link_register.setOpenExternalLinks(True)
         # Display url link to about page
         urlLink = "<a href=\"https://flyfotos.dk/da-dk/Om-FlyFotosdk\">here</a>"
-        self.labelLink.setText(urlLink)
-        self.labelLink.setFont(QFont('Arial', 9))
-        self.labelLink.setOpenExternalLinks(True)
+        self.label_link.setText(urlLink)
+        self.label_link.setFont(QFont('Arial', 9))
+        self.label_link.setOpenExternalLinks(True)
         # Set Token value from QgsSettings
         user_data_read = QgsSettings()
         token = user_data_read.value("flyfotosdk/token", "")
         self.token_user_input_text = token
-        self.lineEditFlyfotosToken.setText(token)
+        self.line_edit_flyfotos_token.setText(token)
 
     def accept_dialog(self):
-        reg_exp = QRegExp("^[a-zA-Z0-9\-]{2,40}$")
-        reg_exp_validator = QRegExpValidator(reg_exp, self)
-        user_input_check = self.lineEditFlyfotosToken.setValidator(
-            reg_exp_validator)
-        if user_input_check:
-            token_text = self.lineEditFlyfotosToken.text()
+        # Check if token has correct format and continue
+        regex = re.compile("^[0-9A-Za-z\-]{2,40}$")
+        match = regex.match(str(self.line_edit_flyfotos_token.text()))
+        if match:
+            token_text = self.line_edit_flyfotos_token.text()
             self.token_user_input_text = token_text
             user_token_input = QgsSettings()
             user_token_input.setValue("flyfotosdk/token", token_text)
         else:
             print("User token validation error")
-            settingErrorDialog = QMessageBox()
-            settingErrorDialog.setIcon(QMessageBox.Information)
-            settingErrorDialog.setText(
+            setting_error_dialog = QMessageBox()
+            setting_error_dialog.setIcon(QMessageBox.Information)
+            setting_error_dialog.setText(
                 "Token validation error: token format was incorrect, or it included forbidden characters. A token may consist of letters [a-zA-Z], numbers[0-9] and a dash '-'.")
-            settingErrorDialog.setStandardButtons(QMessageBox.Ok)
-            settingErrorDialog.exec()
+            setting_error_dialog.setStandardButtons(QMessageBox.Ok)
+            setting_error_dialog.exec()

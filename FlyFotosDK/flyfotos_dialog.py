@@ -27,17 +27,17 @@ import xml.etree.cElementTree as ET
 from operator import itemgetter
 import datetime
 import pathlib
-from .flyfotosSettings import ConfigDialog
-from qgis.PyQt import uic
-from qgis.PyQt import QtWidgets
+
+from qgis.PyQt import uic, QtWidgets
 from qgis.utils import iface
-from qgis.core import QgsProject, QgsRasterLayer, QgsGeometry
-from qgis.core import QgsCoordinateReferenceSystem
-from qgis.core import QgsCoordinateTransform
-from PyQt5.QtCore import QUrl, QEventLoop
-from PyQt5.QtCore import Qt
+from qgis.core import QgsProject, QgsRasterLayer, QgsGeometry, QgsCoordinateReferenceSystem, QgsCoordinateTransform
+from PyQt5.QtCore import QUrl, QEventLoop, Qt, QSortFilterProxyModel, QRegExp
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
-from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox, QTableWidget, QVBoxLayout, QLineEdit, QTableView, QHeaderView
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
+
+from .flyfotosSettings import ConfigDialog
+from .multifilter_proxy_model import MultiFilterProxyModel
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
@@ -72,16 +72,12 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
         # Hide error message label on load
-        self.labelErrorMessage.hide()
-        # Button click to add/show layer
-        self.pushButtonAddLayer.clicked.connect(self.clickAddLayer)
-        # Click to close dialog
-        self.pushButtonClose.clicked.connect(self.closeDialog)
-        # double click to show layer from All tab
-        self.tableWidgetAlle.doubleClicked.connect(self.doubleClicked_table)
-        # double click to show layer from Visible tab
-        self.tableWidgetSynlige.doubleClicked.connect(
-            self.doubleClicked_tableSynlige)
+        self.label_error_message.hide()
+        self.push_button_add_layer.clicked.connect(self.add_layer_onclick)
+        self.push_button_close.clicked.connect(self.close_onclick)
+        self.table_view_all.doubleClicked.connect(self.table_all_ondoubleclick)
+        self.table_view_visible.doubleClicked.connect(
+            self.table_visible_ondoubleclick)
 
         user_token_value = ConfigDialog.token_user_input_text
         token = ""
@@ -100,14 +96,13 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
         self.token = cred
         if self.is_capabilities_old() or reload:
             if layer_arr:
-                print("layer_arr")
                 layer_arr.clear()
             self.save_capabilities(self.get_from_url("", cred))
-        # To show showAlleTabTable, showSynligeTabTable by default onload
-        self.showAllTable()
-        self.showVisibleTable()
+        # To show show_all_table, show_visible_table by default onload
+        self.show_all_table()
+        self.show_visible_table()
 
-    def showAllTable(self):
+    def show_all_table(self):
         """[summary]
            Reads the GetCapabilities file and creates the all layer table from the result.
         """
@@ -117,8 +112,7 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
             try:
                 tree = ET.XML(xml)
                 et = ET.ElementTree(tree)
-                et.write(file_path, encoding="utf-8",
-                         xml_declaration=False)
+                et.write(file_path, encoding="utf-8", xml_declaration=False)
                 root = et.getroot()
                 # Tags have a special prefix. We are looking for Capability
                 caps = root.find('{http://www.opengis.net/wms}Capability')
@@ -157,43 +151,13 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
                                             t_maxx + ' ' + t_miny + ',' + t_minx + ' ' + t_miny + '))')
                      ))
 
-            # Sort by 0,1,2 or 3 (decade, scale, title, layer name)
             layer_arr.sort(key=itemgetter(0))
-            self.tableWidgetAlle.setColumnCount(4)
-            self.tableWidgetAlle.setRowCount(len(layer_arr))
-            self.tableWidgetAlle.setHorizontalHeaderLabels(
-                [u'', u'Decade', u'Title'])
+            self.model_all = QStandardItemModel(len(layer_arr), 4)
+            self.filter_proxy_model = MultiFilterProxyModel()
+            self.init_table_view(layer_arr, self.model_all,
+                                 self.filter_proxy_model, self.table_view_all)
 
-            # Column width
-            header = self.tableWidgetAlle.horizontalHeader()
-            header.resizeSection(0, 20)
-            header.setSectionResizeMode(
-                1, QtWidgets.QHeaderView.ResizeToContents)
-            header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
-
-            i = 0
-            for layer in layer_arr:
-                # Checkbox on firsl column
-                self.itemCheckbox = QTableWidgetItem("")
-                self.itemCheckbox.setFlags(Qt.ItemIsEnabled)
-                self.itemCheckbox.setTextAlignment(Qt.AlignCenter)
-                self.tableWidgetAlle.setItem(
-                    i, 0, QtWidgets.QTableWidgetItem(self.itemCheckbox))
-
-                # To center decade text inside a cell
-                self.itemText = QTableWidgetItem(layer_arr[i][0])
-                self.itemText.setTextAlignment(Qt.AlignCenter)
-                # Show decade on second column
-                self.tableWidgetAlle.setItem(i, 1, self.itemText)
-
-                # Show Title on third column
-                self.tableWidgetAlle.setItem(
-                    i, 2, QtWidgets.QTableWidgetItem(layer_arr[i][2]))
-                self.tableWidgetAlle.setItem(
-                    i, 3, QtWidgets.QTableWidgetItem(layer_arr[i][1]))
-                i += 1
-
-    def showVisibleTable(self):
+    def show_visible_table(self):
         """[summary]
         Creates the visible layer table given a list of layers and the current users view extent.
 
@@ -210,99 +174,100 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
                         # Append Decade, Name, Title as an item
                         visible_layer_result.append(
                             (layer[0], layer[1], layer[2]))
+
                 if len(visible_layer_result) > 0:
-                    self.tableWidgetSynlige.setColumnCount(4)
-                    self.tableWidgetSynlige.setRowCount(len(visible_layer_result))
-                    self.tableWidgetSynlige.setHorizontalHeaderLabels(
-                        [u'', u'Decade', u'Title'])
-                    # Column width
-                    header = self.tableWidgetSynlige.horizontalHeader()
-                    header.resizeSection(0, 20)
-                    header.setSectionResizeMode(
-                        1, QtWidgets.QHeaderView.ResizeToContents)
-                    header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
-
-                    i = 0
-                    for layer in visible_layer_result:
-                        # Add Checkbox on firsl column
-                        self.itemCheckbox = QTableWidgetItem("")
-                        self.itemCheckbox.setFlags(Qt.ItemIsEnabled)
-                        self.tableWidgetSynlige.setItem(
-                            i, 0, QtWidgets.QTableWidgetItem(self.itemCheckbox))
-
-                        # To center decade text inside a cell
-                        self.itemText = QTableWidgetItem(layer[0])
-                        self.itemText.setTextAlignment(Qt.AlignCenter)
-                        # Show decade on second column
-                        self.tableWidgetSynlige.setItem(i, 1, self.itemText)
-
-                        # Set layer Title on third column
-                        self.tableWidgetSynlige.setItem(
-                            i, 2, QtWidgets.QTableWidgetItem(layer[2]))
-                        # Set layer name
-                        self.tableWidgetSynlige.setItem(
-                            i, 3, QtWidgets.QTableWidgetItem(layer[1]))
-                        i += 1
+                    self.model_visible = QStandardItemModel(
+                        len(visible_layer_result), 4)
+                    self.filter_proxy_model_visible = MultiFilterProxyModel()
+                    self.init_table_view(visible_layer_result, self.model_visible,
+                                         self.filter_proxy_model_visible, self.table_view_visible)
                 else:
-                    self.tableWidgetSynlige.setRowCount(0)
-                    self.tableWidgetSynlige.setColumnCount(0)
+                    self.clear_model_visible()
         except:
             print("Geometry object is a None type")
 
-    def clickAddLayer(self):
+    def init_table_view(self, layers, model, filter_proxy_model, table_view):
+        model.setHorizontalHeaderLabels(['', 'Decade', 'Title'])
+        i = 0
+        for layer in layers:
+            # Sort by 0,1,2 or 3 (decade, title, layer name, filtered data row number)
+            item_text = QStandardItem(layer[0])
+            item_text.setTextAlignment(Qt.AlignCenter)
+            model.setItem(i, 1, item_text)
+            model.setItem(i, 2, QStandardItem(layer[2]))
+            model.setItem(i, 3, QStandardItem(layer[1]))
+            row_number = QStandardItem()
+            row_number.setData(i, Qt.EditRole)
+            model.setItem(i, 4, row_number)
+            i += 1
+
+        filter_proxy_model.setSourceModel(model)
+        self.line_edit_search_layer.setFocus()
+
+        for i in range(1, 3):
+            self.line_edit_search_layer.textChanged.connect(lambda text, col=i:
+                                                            filter_proxy_model.setFilterByColumn(col, QRegExp(text, Qt.CaseInsensitive, QRegExp.FixedString)))
+
+        table_view.setModel(model)
+        table_view.hideColumn(3)
+        table_view.hideColumn(4)
+        table_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        table_view.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Fixed)
+        table_view.setColumnWidth(1, 90)
+        table_view.setSortingEnabled(True)
+        table_view.setModel(filter_proxy_model)
+
+    def add_layer_onclick(self):
         """[summary]
 
             Adds selected layer to the canvas.
         """
-        table = ""
-        if self.tabWidget.currentIndex() == 0:
-            table = self.tableWidgetSynlige
+        selected_rows = []
+        is_tab_all = False
+        if self.tab_widget.currentIndex() == 0:
+            selected_rows = self.table_view_visible.selectionModel().selectedRows()
         else:
-            table = self.tableWidgetAlle
-        if table == self.tableWidgetAlle or table == self.tableWidgetSynlige:
-            selected_rows = table.selectionModel().selectedRows()
-            # since only a single row can be selected, first element will be the row
-            if len(selected_rows) > 0:
-                item = selected_rows[0]
-                selected_row_number = item.row()
-                if selected_row_number > -1:
-                    table.item(
-                        selected_row_number, 0).setText("√")
-                    selected_layerTitle = table.item(
-                        selected_row_number, 2).text()
-                    selected_layerName = table.item(
-                        selected_row_number, 3).text()
-                    self.get_layer(selected_layerName.lower(),
-                                   selected_layerTitle)
+            selected_rows = self.table_view_all.selectionModel().selectedRows()
+            is_tab_all = True
 
-    def doubleClicked_table(self, item):
+        # Since only a single row can be selected, first element will be the row
+        if len(selected_rows) > 0:
+            item = selected_rows[0]
+            if is_tab_all:
+                self.handle_item_click(item, self.model_all)
+            else:
+                self.handle_item_click(item, self.model_visible)
+
+    def table_all_ondoubleclick(self, item):
         """[summary]
             Adds the double clicked layer to the canvas.
         Args:
 
             item (QTWidgetTableItem): The selected row of the table.
         """
-        row_number = item.row()
-        if row_number > -1:
-            self.tableWidgetAlle.item(row_number, 0).setText("√")
-            layerTitle = self.tableWidgetAlle.item(row_number, 2).text()
-            layerName = self.tableWidgetAlle.item(row_number, 3).text()
-            self.get_layer(layerName, layerTitle)
+        self.handle_item_click(item, self.model_all)
 
-    def doubleClicked_tableSynlige(self, item):
+    def table_visible_ondoubleclick(self, item):
         """[summary]
             Adds the double clicked layer to the canvas.
         Args:
 
             item (QTWidgetTableItem): The selected row of the table.
         """
+        self.handle_item_click(item, self.model_visible)
+
+    def handle_item_click(self, item, model):
         row_number = item.row()
+        print("row number", row_number)
         if row_number > -1:
-            self.tableWidgetSynlige.item(
-                row_number, 0).setText("√")
-            layerTitle = self.tableWidgetSynlige.item(row_number, 2).text()
-            layerName = self.tableWidgetSynlige.item(row_number, 3).text()
-            self.get_layer(layerName, layerTitle)
+            actual_row_number = item.sibling(row_number, 4).data()
+            print("actual_row_number", actual_row_number)
+            item_check = QStandardItem("√")
+            item_check.setTextAlignment(Qt.AlignCenter)
+            model.setItem(actual_row_number, 0, item_check)
+            layer_title = model.data(model.index(actual_row_number, 2))
+            layer_name = model.data(model.index(actual_row_number, 3))
+            self.add_map_layer(layer_name, layer_title)
 
     def get_extent(self):
         """
@@ -340,7 +305,7 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
         """
         return QgsProject.instance().crs().authid()
 
-    def get_layer(self, layer, title):
+    def add_map_layer(self, layer, title):
         """[summary]
             Loads a raster layer with the given name and title.
 
@@ -390,11 +355,12 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
         reply.finished.connect(event.quit)
         event.exec()
         er = reply.error()
+
         if er == QNetworkReply.NoError:
             bytes_string = reply.readAll()
             content_requests = bytes_string.data().decode('utf8')
             # Hide error message from plugin, if user's token is correct
-            self.labelErrorMessage.hide()
+            self.label_error_message.hide()
             if len(str(content_requests)) > 0:
                 return content_requests
             else:
@@ -404,12 +370,25 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
             self.errorBox(
                 "Something went wrong. Check if the token is correct.")
             # Show error message label on plugin, if user's token is wrong
-            self.labelErrorMessage.show()
-            self.tableWidgetAlle.clear()
-            self.tableWidgetAlle.setRowCount(0)
-            self.tableWidgetAlle.setColumnCount(0)
+            self.label_error_message.show()
+            self.clear_model_visible()
+            self.clear_model_all()
             print(
                 'http error {} - No content. Please check your token is correct'.format(er))
+
+    def clear_model_visible(self):
+        try:
+            self.model_visible.clear()
+            self.line_edit_search_layer.clear()
+        except:
+            pass
+
+    def clear_model_all(self):
+        try:
+            self.model_all.clear()
+            self.line_edit_search_layer.clear()
+        except:
+            pass
 
     def save_capabilities(self, inp):
         """[summary]
@@ -456,9 +435,9 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
         Orders the visible layer table to be created.
         """
         if not iface.mapCanvas().isDrawing():
-            self.showVisibleTable()
+            self.show_visible_table()
 
-    def closeDialog(self):
+    def close_onclick(self):
         self.close()
 
     def errorBox(self, strText):

@@ -6,15 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
+    <width>513</width>
     <height>410</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>FlyFotosDK</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
-   <item row="2" column="0" colspan="2">
+   <item row="3" column="0" colspan="3">
     <widget class="QFrame" name="frameBackground">
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
@@ -22,13 +28,13 @@
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QTabWidget" name="tabWidget">
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="1" column="0">
+       <widget class="QTabWidget" name="tab_widget">
         <property name="font">
          <font>
           <family>Arial</family>
-          <pointsize>10</pointsize>
+          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="tabPosition">
@@ -40,123 +46,76 @@
         <property name="currentIndex">
          <number>1</number>
         </property>
-        <widget class="QWidget" name="tabSynlige">
+        <widget class="QWidget" name="tab_visible">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
          <attribute name="title">
           <string>Visible</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
-           <widget class="QTableWidget" name="tableWidgetSynlige">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="sizeIncrement">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Arial</family>
-              <stylestrategy>PreferDefault</stylestrategy>
-             </font>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::DefaultContextMenu</enum>
-            </property>
-            <property name="toolTipDuration">
-             <number>-1</number>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
-            <property name="autoFillBackground">
-             <bool>false</bool>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">selection-background-color: rgb(0, 170, 255);</string>
-            </property>
-            <property name="verticalScrollBarPolicy">
-             <enum>Qt::ScrollBarAsNeeded</enum>
-            </property>
-            <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarAsNeeded</enum>
-            </property>
-            <property name="sizeAdjustPolicy">
-             <enum>QAbstractScrollArea::AdjustToContents</enum>
-            </property>
-            <property name="autoScroll">
-             <bool>true</bool>
-            </property>
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
-            </property>
-            <property name="dragDropOverwriteMode">
-             <bool>false</bool>
-            </property>
-            <property name="alternatingRowColors">
-             <bool>false</bool>
-            </property>
-            <property name="selectionMode">
-             <enum>QAbstractItemView::SingleSelection</enum>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectRows</enum>
-            </property>
-            <property name="verticalScrollMode">
-             <enum>QAbstractItemView::ScrollPerItem</enum>
-            </property>
-            <property name="showGrid">
-             <bool>true</bool>
-            </property>
-            <property name="sortingEnabled">
-             <bool>true</bool>
-            </property>
-            <attribute name="horizontalHeaderCascadingSectionResizes">
-             <bool>true</bool>
-            </attribute>
-            <attribute name="horizontalHeaderDefaultSectionSize">
-             <number>0</number>
-            </attribute>
-            <attribute name="horizontalHeaderMinimumSectionSize">
-             <number>0</number>
-            </attribute>
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderCascadingSectionResizes">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderDefaultSectionSize">
-             <number>30</number>
-            </attribute>
-            <attribute name="verticalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderMinimumSectionSize">
-             <number>24</number>
-            </attribute>
-            <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderStretchLastSection">
-             <bool>false</bool>
-            </attribute>
-           </widget>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QTableView" name="table_view_visible">
+              <property name="minimumSize">
+               <size>
+                <width>350</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Arial</family>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">selection-background-color: rgb(0, 170, 255);</string>
+              </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="dragDropOverwriteMode">
+               <bool>false</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::SingleSelection</enum>
+              </property>
+              <property name="selectionBehavior">
+               <enum>QAbstractItemView::SelectRows</enum>
+              </property>
+              <property name="cornerButtonEnabled">
+               <bool>false</bool>
+              </property>
+              <attribute name="horizontalHeaderDefaultSectionSize">
+               <number>44</number>
+              </attribute>
+              <attribute name="horizontalHeaderMinimumSectionSize">
+               <number>44</number>
+              </attribute>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderMinimumSectionSize">
+               <number>24</number>
+              </attribute>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tabAlle">
+        <widget class="QWidget" name="tab_alle">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
          <property name="toolTipDuration">
           <number>-1</number>
          </property>
@@ -171,125 +130,119 @@
            <number>6</number>
           </property>
           <item row="0" column="0">
-           <widget class="QTableWidget" name="tableWidgetAlle">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="sizeIncrement">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Arial</family>
-              <stylestrategy>PreferDefault</stylestrategy>
-             </font>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::StrongFocus</enum>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::DefaultContextMenu</enum>
-            </property>
-            <property name="toolTipDuration">
-             <number>-1</number>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
-            <property name="autoFillBackground">
-             <bool>false</bool>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">selection-background-color: rgb(0, 170, 255);</string>
-            </property>
-            <property name="verticalScrollBarPolicy">
-             <enum>Qt::ScrollBarAsNeeded</enum>
-            </property>
-            <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarAsNeeded</enum>
-            </property>
-            <property name="sizeAdjustPolicy">
-             <enum>QAbstractScrollArea::AdjustToContents</enum>
-            </property>
-            <property name="autoScroll">
-             <bool>true</bool>
-            </property>
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
-            </property>
-            <property name="dragDropOverwriteMode">
-             <bool>false</bool>
-            </property>
-            <property name="alternatingRowColors">
-             <bool>false</bool>
-            </property>
-            <property name="selectionMode">
-             <enum>QAbstractItemView::SingleSelection</enum>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectRows</enum>
-            </property>
-            <property name="verticalScrollMode">
-             <enum>QAbstractItemView::ScrollPerItem</enum>
-            </property>
-            <property name="showGrid">
-             <bool>true</bool>
-            </property>
-            <property name="sortingEnabled">
-             <bool>true</bool>
-            </property>
-            <attribute name="horizontalHeaderCascadingSectionResizes">
-             <bool>true</bool>
-            </attribute>
-            <attribute name="horizontalHeaderDefaultSectionSize">
-             <number>0</number>
-            </attribute>
-            <attribute name="horizontalHeaderMinimumSectionSize">
-             <number>0</number>
-            </attribute>
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderCascadingSectionResizes">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderDefaultSectionSize">
-             <number>30</number>
-            </attribute>
-            <attribute name="verticalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderMinimumSectionSize">
-             <number>24</number>
-            </attribute>
-            <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderStretchLastSection">
-             <bool>false</bool>
-            </attribute>
-           </widget>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QTableView" name="table_view_all">
+              <property name="minimumSize">
+               <size>
+                <width>350</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Arial</family>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">selection-background-color: rgb(0, 170, 255);</string>
+              </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="dragDropOverwriteMode">
+               <bool>false</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::SingleSelection</enum>
+              </property>
+              <property name="selectionBehavior">
+               <enum>QAbstractItemView::SelectRows</enum>
+              </property>
+              <property name="cornerButtonEnabled">
+               <bool>false</bool>
+              </property>
+              <attribute name="horizontalHeaderDefaultSectionSize">
+               <number>44</number>
+              </attribute>
+              <attribute name="horizontalHeaderMinimumSectionSize">
+               <number>44</number>
+              </attribute>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderMinimumSectionSize">
+               <number>24</number>
+              </attribute>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
        </widget>
       </item>
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="line_edit_search_layer">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Arial</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_flyfotos_title">
+          <property name="maximumSize">
+           <size>
+            <width>150</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Arial</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Search Title</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+          <property name="margin">
+           <number>4</number>
+          </property>
+          <property name="indent">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="4" column="2">
     <widget class="QFrame" name="frameButton">
      <property name="styleSheet">
       <string notr="true"/>
@@ -302,14 +255,14 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <widget class="QPushButton" name="pushButtonAddLayer">
+       <widget class="QPushButton" name="push_button_add_layer">
         <property name="enabled">
          <bool>true</bool>
         </property>
         <property name="font">
          <font>
           <family>Arial</family>
-          <pointsize>10</pointsize>
+          <pointsize>9</pointsize>
           <stylestrategy>PreferDefault</stylestrategy>
           <kerning>true</kerning>
          </font>
@@ -335,11 +288,11 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QPushButton" name="pushButtonClose">
+       <widget class="QPushButton" name="push_button_close">
         <property name="font">
          <font>
           <family>Arial</family>
-          <pointsize>10</pointsize>
+          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="text">
@@ -350,36 +303,8 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="labelFlyfotosTitle">
-     <property name="font">
-      <font>
-       <family>Arial</family>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string>Choose Layer</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
-     </property>
-     <property name="margin">
-      <number>4</number>
-     </property>
-     <property name="indent">
-      <number>10</number>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="labelErrorMessage">
+   <item row="0" column="1" colspan="2">
+    <widget class="QLabel" name="label_error_message">
      <property name="font">
       <font>
        <family>Arial</family>

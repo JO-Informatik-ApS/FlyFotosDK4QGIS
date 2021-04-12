@@ -7,7 +7,7 @@
 name=FlyFotosDK
 qgisMinimumVersion=3.4
 description=Samling af Danmarks historiske flyfotos
-version=1.00
+version=1.01
 author=JO Informatik ApS
 email=flyfotos@jo-informatik.dk
 
