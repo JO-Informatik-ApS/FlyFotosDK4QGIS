@@ -34,7 +34,67 @@ repository=https://github.com/JO-Informatik-ApS/FlyFotosDK4QGIS
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-changelog=2020-11-01 First release
+# This file contains metadata for your plugin.
+
+# This file should be included when you package your plugin.
+# Mandatory items:
+
+[general]
+name=FlyFotosDK
+qgisMinimumVersion=3.4
+description=Samling af Danmarks historiske flyfotos
+version=1.01
+author=JO Informatik ApS
+email=flyfotos@jo-informatik.dk
+
+about=Tjenesten FlyFotosDK udbyder mere end 1.200 unikke historiske flyfotoserier, svarende til godt en halv million individuelle billeder. Det store billede katalog dækker Danmark i flere årtier og skalaer. Læs mere om løsningen på <a href="https://flyfotos.dk/">https://flyfotos.dk/</a>
+
+    Denne plugin gør det nemt at overskue de mange flyfotoserier. Du kan f.eks. vælge at få en oversigt over de ”synlige” serier i kortvinduet. Derudover kan du udvælge serier via skala eller fra et givet årti.
+
+    For at kunne anvende denne plugin skal du have etableret en brugerkonto til tjenesten - Læs mere her <a href="https://flyfotos.dk/da-dk/produkter/adgang">https://flyfotos.dk/da-dk/produkter/adgang</a>
+
+    English:
+    The FlyFotosDK service offers more than 1.200 unique historical aerial photoseries, which is the equivalent of more than half a million individual photos. This large catalogue covers the whole of Denmark, divided over multiple decades and several scales. Read more about the service on the website <a href="https://flyfotos.dk/">https://flyfotos.dk/</a>
+    
+    This plugin helps with managing the many aerial photoseries. It allows you for example to get an overview of the visible layers in the current map canvas extent. Alternately you can sort the photoseries based on scale for a given decade.
+    
+    To use this plugin you need to have an account - read more here <a href="https://flyfotos.dk/da-dk/produkter/adgang">https://flyfotos.dk/da-dk/produkter/adgang</a>
+
+    <img src="https://flyfotos.dk/Portals/2/flyfotodk-logo.png?ver=2020-05-20-124201-440" alt="FlyfotosDK" width="201" height="62">
+
+tracker=https://github.com/JO-Informatik-ApS/FlyFotosDK4QGIS/issues
+repository=https://github.com/JO-Informatik-ApS/FlyFotosDK4QGIS
+# End of mandatory metadata
+
+# Recommended items:
+
+hasProcessingProvider=no
+# Uncomment the following line and add your changelog:
+changelog=2021-04-12 1.01 Small update with minor changes and improvements. Fixed token format validation bug, Various small changes to improve the layout and visual style of the layer list window, Improved layer search
+    2020-11-01 First release
+
+# Tags are comma separated with spaces allowed
+tags=Historiske flyfotos, ortofoto, danmark, denmark, dansk, wms, historical mapping, flyfotoarkivet, iarchive
+
+homepage=https://flyfotos.dk/da-dk/
+# Category of the plugin: Raster, Vector, Database or Web
+category=Flyfotos, Raster
+icon=images/icon.png
+# experimental flag
+experimental=False
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+
+# Since QGIS 3.8, a comma separated list of plugins to be installed
+# (or upgraded) can be specified.
+# Check the documentation for more information.
+# plugin_dependencies=
+
+# If the plugin can run on QGIS Server.
+server=False
+
+
 
 # Tags are comma separated with spaces allowed
 tags=Historiske flyfotos, ortofoto, danmark, denmark, dansk, wms, historical mapping, flyfotoarkivet, iarchive
