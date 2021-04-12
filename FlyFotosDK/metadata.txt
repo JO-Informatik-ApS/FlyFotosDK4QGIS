@@ -52,27 +52,3 @@ deprecated=False
 
 # If the plugin can run on QGIS Server.
 server=False
-
-
-
-# Tags are comma separated with spaces allowed
-tags=Historiske flyfotos, ortofoto, danmark, denmark, dansk, wms, historical mapping, flyfotoarkivet, iarchive
-
-homepage=https://flyfotos.dk/da-dk/
-# Category of the plugin: Raster, Vector, Database or Web
-category=Flyfotos, Raster
-icon=images/icon.png
-# experimental flag
-experimental=False
-
-# deprecated flag (applies to the whole plugin, not just a single version)
-deprecated=False
-
-# Since QGIS 3.8, a comma separated list of plugins to be installed
-# (or upgraded) can be specified.
-# Check the documentation for more information.
-# plugin_dependencies=
-
-# If the plugin can run on QGIS Server.
-server=False
-
