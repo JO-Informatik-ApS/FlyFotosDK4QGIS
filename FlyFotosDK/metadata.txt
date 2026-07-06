@@ -1,8 +1,9 @@
 [general]
 name=FlyFotosDK
 qgisMinimumVersion=3.4
+qgisMaximumVersion=4.99
 description=Samling af Danmarks historiske flyfotos
-version=1.1
+version=1.2
 author=JO Informatik ApS
 email=flyfotos@jo-informatik.dk
 
@@ -29,7 +30,8 @@ repository=https://github.com/JO-Informatik-ApS/FlyFotosDK4QGIS
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-changelog=2021-04-12 1.01 Small update with minor changes and improvements. Fixed token format validation bug, Various small changes to improve the layout and visual style of the layer list window, Improved layer search
+changelog=2026-06-17 1.2 Update for QGIS 4 and Qt6
+    2021-04-12 1.1 Small update with minor changes and improvements. Fixed token format validation bug, Various small changes to improve the layout and visual style of the layer list window, Improved layer search
     2020-11-01 First release
 
 # Tags are comma separated with spaces allowed

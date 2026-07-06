@@ -1,9 +1,9 @@
 import os.path
 import re
-from PyQt5 import uic
+from qgis.PyQt import uic
 from qgis.gui import (QgsOptionsPageWidget)
-from PyQt5.QtWidgets import QVBoxLayout
-from PyQt5.QtGui import QFont
+from qgis.PyQt.QtWidgets import QVBoxLayout, QMessageBox
+from qgis.PyQt.QtGui import QFont
 from qgis.core import (QgsSettings)
 
 WIDGET, BASE = uic.loadUiType(
@@ -17,7 +17,6 @@ class ConfigOptionsPage(QgsOptionsPageWidget):
         self.config_widget = ConfigDialog()
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setMargin(0)
         self.setLayout(layout)
         layout.addWidget(self.config_widget)
         self.setObjectName('widgetOptions')
@@ -53,7 +52,7 @@ class ConfigDialog(WIDGET, BASE):
 
     def accept_dialog(self):
         # Check if token has correct format and continue
-        regex = re.compile("^[0-9A-Za-z\-]{2,40}$")
+        regex = re.compile(r"^[0-9A-Za-z\-]{2,40}$")
         match = regex.match(str(self.line_edit_flyfotos_token.text()))
         if match:
             token_text = self.line_edit_flyfotos_token.text()

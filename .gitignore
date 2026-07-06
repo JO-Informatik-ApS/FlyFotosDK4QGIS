@@ -133,3 +133,5 @@ dmypy.json
 
 #Pb_tool build folder
 zip_build/
+
+*.qrc

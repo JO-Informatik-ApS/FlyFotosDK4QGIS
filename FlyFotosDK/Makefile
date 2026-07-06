@@ -61,11 +61,11 @@ PEP8EXCLUDE=pydev,resources.py,conf.py,third_party,ui
 # QGISDIR points to the location where your plugin should be installed.
 # This varies by platform, relative to your HOME directory:
 #	* Linux:
-#	  .local/share/QGIS/QGIS3/profiles/default/python/plugins/
+#	  .local/share/QGIS/QGIS4/profiles/default/python/plugins/
 #	* Mac OS X:
-#	  Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins
+#	  Library/Application Support/QGIS/QGIS4/profiles/default/python/plugins
 #	* Windows:
-#	  AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins'
+#	  AppData\Roaming\QGIS\QGIS4\profiles\default\python\plugins'
 
 
 #################################################
@@ -90,7 +90,7 @@ default:
 compile: $(COMPILED_RESOURCE_FILES)
 
 %.py : %.qrc $(RESOURCES_SRC)
-	pyrcc5 -o $*.py  $<
+	pyrcc6 -o $*.py  $<
 
 %.qm : %.ts
 	$(LRELEASE) $<

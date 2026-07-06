@@ -31,10 +31,10 @@ import pathlib
 from qgis.PyQt import uic, QtWidgets
 from qgis.utils import iface
 from qgis.core import QgsProject, QgsRasterLayer, QgsGeometry, QgsCoordinateReferenceSystem, QgsCoordinateTransform
-from PyQt5.QtCore import QUrl, QEventLoop, Qt, QSortFilterProxyModel, QRegExp
-from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
-from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox, QTableWidget, QVBoxLayout, QLineEdit, QTableView, QHeaderView
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from qgis.PyQt.QtCore import QUrl, QEventLoop, Qt, QRegularExpression
+from qgis.PyQt.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
+from qgis.PyQt.QtWidgets import QTableWidgetItem, QMessageBox, QTableWidget, QVBoxLayout, QLineEdit, QTableView, QHeaderView
+from qgis.PyQt.QtGui import QStandardItemModel, QStandardItem
 
 from .flyfotosSettings import ConfigDialog
 from .multifilter_proxy_model import MultiFilterProxyModel
@@ -192,12 +192,12 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
         for layer in layers:
             # Sort by 0,1,2 or 3 (decade, title, layer name, filtered data row number)
             item_text = QStandardItem(layer[0])
-            item_text.setTextAlignment(Qt.AlignCenter)
+            item_text.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             model.setItem(i, 1, item_text)
             model.setItem(i, 2, QStandardItem(layer[2]))
             model.setItem(i, 3, QStandardItem(layer[1]))
             row_number = QStandardItem()
-            row_number.setData(i, Qt.EditRole)
+            row_number.setData(i, Qt.ItemDataRole.EditRole)
             model.setItem(i, 4, row_number)
             i += 1
 
@@ -206,13 +206,13 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
 
         for i in range(1, 3):
             self.line_edit_search_layer.textChanged.connect(lambda text, col=i:
-                                                            filter_proxy_model.setFilterByColumn(col, QRegExp(text, Qt.CaseInsensitive, QRegExp.FixedString)))
+                                                            filter_proxy_model.setFilterByColumn(col, QRegularExpression(QRegularExpression.escape(text), QRegularExpression.PatternOption.CaseInsensitiveOption)))
 
         table_view.setModel(model)
         table_view.hideColumn(3)
         table_view.hideColumn(4)
-        table_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        table_view.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Fixed)
+        table_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        table_view.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Fixed)
         table_view.setColumnWidth(1, 90)
         table_view.setSortingEnabled(True)
         table_view.setModel(filter_proxy_model)
@@ -263,7 +263,7 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
             actual_row_number = item.sibling(row_number, 4).data()
             print("actual_row_number", actual_row_number)
             item_check = QStandardItem("√")
-            item_check.setTextAlignment(Qt.AlignCenter)
+            item_check.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             model.setItem(actual_row_number, 0, item_check)
             layer_title = model.data(model.index(actual_row_number, 2))
             layer_name = model.data(model.index(actual_row_number, 3))
@@ -356,7 +356,7 @@ class FlyfotosDialog(QtWidgets.QDialog, FORM_CLASS):
         event.exec()
         er = reply.error()
 
-        if er == QNetworkReply.NoError:
+        if er == QNetworkReply.NetworkError.NoError:
             bytes_string = reply.readAll()
             content_requests = bytes_string.data().decode('utf8')
             # Hide error message from plugin, if user's token is correct

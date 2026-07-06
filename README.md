@@ -49,7 +49,7 @@ We have found this error on QGIS versions 3.10.0 - 3.10.1.
 ## Authors
 
 - **Nisha Vijai**
-- **Valdas Zabulionis**
+- **Valdas Larsen**
 
 Developed at **JO Informatik ApS**  
 Website: [**https://jo-informatik.dk/**](https://jo-informatik.dk/)

@@ -26,11 +26,16 @@ from .flyfotosSettings import MyPluginOptionsFactory
 from .flyfotos_dialog import FlyfotosDialog
 from .resources import *
 from qgis.core import Qgis, QgsSettings
-from qgis.PyQt.QtWidgets import QAction, QMenu, QPushButton
-from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
-from PyQt5.QtWidgets import (QProgressBar)
-from PyQt5.QtCore import QTimer
+from qgis.PyQt.QtWidgets import QAction, QMenu, QPushButton, QProgressBar, QApplication
+from qgis.PyQt.QtGui import QIcon, QPalette
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QTimer
+
+# Qt6 (QGIS 4+) scopes enums (QPalette.ColorRole.Window), while Qt5 (QGIS 3.x)
+# exposes them directly on the class. Resolve both.
+try:  # Qt6
+    _ROLE_WINDOW = QPalette.ColorRole.Window
+except AttributeError:  # Qt5
+    _ROLE_WINDOW = QPalette.Window
 
 # Initialize Qt resources from file resources.py
 # Import the code for the dialog
@@ -165,13 +170,33 @@ class FlyFotosDK:
         self.actions.append(action)
         return action
 
+    @staticmethod
+    def _is_dark_theme():
+        """Return True if QGIS is currently using a dark UI theme.
+
+        Works regardless of whether dark mode comes from a QGIS UI theme or
+        from the operating system (QGIS 4+), by inspecting the actual window
+        background colour of the application palette.
+        """
+        app = QApplication.instance()
+        if app is None:
+            return False
+        window_color = app.palette().color(_ROLE_WINDOW)
+        # lightness() is 0 (black) .. 255 (white); < 128 means a dark background
+        return window_color.lightness() < 128
+
+    def _icon_path(self):
+        """Path to the icon matching the current light/dark theme."""
+        name = 'images/icon_dark.png' if self._is_dark_theme() else 'images/icon.png'
+        return os.path.join(self.plugin_dir, name)
+
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = os.path.join(os.path.dirname(
-            __file__), 'images/icon.png')
+        # Pick the icon matching the current theme (QGIS requires a restart to
+        # switch themes, so checking once on load is enough).
         self.add_action(
-            icon_path,
+            self._icon_path(),
             text=self.tr(u'FlyFotosDK'),
             callback=self.run,
             parent=self.iface.mainWindow())

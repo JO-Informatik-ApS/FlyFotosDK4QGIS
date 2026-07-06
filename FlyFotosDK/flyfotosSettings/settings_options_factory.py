@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from qgis.gui import (QgsOptionsWidgetFactory)
-from PyQt5.QtGui import QIcon
+from qgis.PyQt.QtGui import QIcon
 
 from .settings_config import ConfigOptionsPage
 

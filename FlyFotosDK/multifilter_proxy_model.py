@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt, QSortFilterProxyModel
+from qgis.PyQt.QtCore import Qt, QSortFilterProxyModel, QRegularExpression
 
 
 class MultiFilterMode:
@@ -33,11 +33,14 @@ class MultiFilterProxyModel(QSortFilterProxyModel):
             text = ''
             index = self.sourceModel().index(source_row, key, source_parent)
             if index.isValid():
-                text = self.sourceModel().data(index, Qt.DisplayRole)
+                text = self.sourceModel().data(index, Qt.ItemDataRole.DisplayRole)
                 if text is None:
                     text = ''
-            
-            if qregex.indexIn(text) != -1:
+
+            if not isinstance(qregex, QRegularExpression):
+                qregex = QRegularExpression(str(qregex))
+
+            if qregex.match(str(text)).hasMatch():
                 results.append(True)
             else:
                 results.append(False)
